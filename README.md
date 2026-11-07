@@ -1,8 +1,9 @@
 # 📖 Tom Riddle's Magical Diary
 
-<img width="515" height="640" alt="image" src="https://github.com/user-attachments/assets/111b9d3f-ecf5-4938-8b4f-7aeec38c409c" />
+<img width="1275" height="831" alt="image" src="https://github.com/user-attachments/assets/5c6ce546-bf42-4541-9731-9f14ec6a0b7d" />
 
-<img width="1275" height="831" alt="image" src="https://github.com/user-attachments/assets/c20e61c8-02cd-4358-82fc-120b972f686f" />
+<img width="515" height="640" alt="image" src="https://github.com/user-attachments/assets/d104a145-c3e0-4843-a06c-28b0d297bb62" />
+
 
 
 An interactive and atmospheric web application inspired by Tom Riddle's Diary from the *Harry Potter* universe, combined with modern AI. 🔮✨
