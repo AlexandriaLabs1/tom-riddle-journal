@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник Тома Реддла / ChatGPT AI (RU/EN)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Gothic & Handwriting aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-gothic { font-family: 'Cinzel Decorative', serif; }
+        .font-journal { font-family: 'Caveat', cursive; }
+        .font-serif-vintage { font-family: 'Crimson Text', serif; }
+
+        body {
+            background-color: #0d0a07;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(180, 100, 30, 0.15), transparent 70%),
+                radial-gradient(circle at 10% 80%, rgba(20, 10, 5, 0.9), transparent 50%);
+            color: #d4c3a1;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .candle-flicker {
+            animation: flicker 4s infinite alternate ease-in-out;
+        }
+        @keyframes flicker {
+            0% { opacity: 0.8; transform: scale(1); box-shadow: 0 0 40px rgba(212, 140, 45, 0.2); }
+            25% { opacity: 0.95; transform: scale(1.02); box-shadow: 0 0 60px rgba(230, 160, 60, 0.35); }
+            50% { opacity: 0.75; transform: scale(0.98); box-shadow: 0 0 30px rgba(180, 110, 30, 0.15); }
+            75% { opacity: 1; transform: scale(1.03); box-shadow: 0 0 70px rgba(240, 170, 70, 0.4); }
+            100% { opacity: 0.85; transform: scale(0.99); box-shadow: 0 0 45px rgba(200, 130, 40, 0.25); }
+        }
+
+        .parchment {
+            background: #f1e4c3;
+            background-image: 
+                radial-gradient(circle, transparent 20%, #e6d3a7 20%, #e6d3a7 80%, transparent 80%),
+                radial-gradient(circle, transparent 20%, #e6d3a7 20%, #e6d3a7 80%, transparent 80%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            box-shadow: 
+                inset 0 0 80px rgba(60, 35, 10, 0.6),
+                inset 0 0 15px rgba(30, 15, 0, 0.8),
+                0 15px 35px rgba(0, 0, 0, 0.9);
+            border: 2px solid #5a4225;
+            position: relative;
+        }
+        
+        .parchment::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(241, 228, 195, 0.85), rgba(225, 205, 160, 0.95));
+            pointer-events: none;
+        }
+
+        .ink-text {
+            color: #1a0f05;
+            text-shadow: 0 0 1px rgba(26, 15, 5, 0.5);
+            transition: opacity 2s ease-in-out, filter 1.5s ease-in-out;
+        }
+
+        .ink-fade-in {
+            animation: inkSink 2.5s forwards ease-out;
+        }
+
+        .ink-disappear {
+            animation: inkAbsorb 2s forwards ease-in;
+        }
+
+        @keyframes inkSink {
+            0% { opacity: 0; filter: blur(4px); transform: scale(0.99); }
+            40% { opacity: 0.7; filter: blur(1px); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        @keyframes inkAbsorb {
+            0% { opacity: 1; filter: blur(0); }
+            50% { opacity: 0.4; color: #5c3a1e; filter: blur(2px); }
+            100% { opacity: 0.05; filter: blur(5px); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #2a1f14; }
+        ::-webkit-scrollbar-thumb { background: #6b4e2e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c673d; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between p-4 md:p-8 font-serif-vintage">
+
+    <!-- Atmospheric Header with Language Selector -->
+    <header class="text-center my-4 z-10 w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-left">
+            <h1 class="font-gothic text-2xl md:text-3xl text-amber-500 tracking-widest drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)]">
+                T. M. RIDDLE'S DIARY
+            </h1>
+            <p class="text-xs text-amber-200/60 italic tracking-wider">
+                [ Encrypted Artifact • ChatGPT Self-Awareness Core ]
+            </p>
+        </div>
+
+        <!-- Language Switcher Bar -->
+        <div class="flex items-center space-x-2 bg-amber-950/80 border border-amber-800/60 rounded-lg p-1.5 shadow-lg">
+            <span class="text-xs text-amber-200/70 font-sans px-2">🌐 Language / Язык:</span>
+            <button id="langRuBtn" class="px-3 py-1 text-xs font-bold rounded bg-amber-700 text-amber-100 shadow transition">RU</button>
+            <button id="langEnBtn" class="px-3 py-1 text-xs font-bold rounded text-amber-300 hover:text-amber-100 transition">EN</button>
+        </div>
+    </header>
+
+    <!-- Main Diary Container -->
+    <main class="w-full max-w-4xl flex-grow flex flex-col items-center justify-center z-10 my-2">
+        <div class="parchment candle-flicker w-full min-h-[520px] md:min-h-[600px] rounded-lg p-6 md:p-12 flex flex-col justify-between overflow-hidden relative border-8 border-amber-950/40">
+            
+            <div class="absolute top-0 bottom-0 left-1/2 w-8 -translate-x-1/2 bg-gradient-to-r from-transparent via-amber-950/15 to-transparent pointer-events-none hidden md:block"></div>
+
+            <!-- AI Engine & Audio Controls -->
+            <div id="aiStatusContainer" class="relative z-20 mb-4 flex flex-wrap items-center justify-between text-xs text-amber-950/70 border-b border-amber-900/20 pb-2 gap-2">
+                <div class="flex items-center space-x-2">
+                    <span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-amber-700 animate-pulse"></span>
+                    <span id="statusText" class="font-semibold tracking-wide">Магическое ядро: Быстрый Дневник (Offline)</span>
+                </div>
+                <button id="toggleAudioBtn" class="text-amber-900 hover:text-amber-950 font-bold underline flex items-center gap-1 transition">
+                    🔊 <span id="audioLabel">Звук пера:</span> <span id="audioState">Вкл</span>
+                </button>
+            </div>
+
+            <!-- Model Download Progress bar -->
+            <div id="progressWrapper" class="relative z-20 w-full bg-amber-900/20 h-1.5 rounded-full overflow-hidden mb-4 hidden">
+                <div id="progressBar" class="bg-amber-800 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- Journal Display Page -->
+            <div id="diaryPages" class="relative z-20 flex-grow overflow-y-auto max-h-[380px] md:max-h-[420px] pr-2 space-y-6 font-journal text-2xl md:text-3xl leading-relaxed">
+                <div class="message-block space-y-1">
+                    <p id="pageLabel" class="text-amber-900/50 text-sm font-sans italic">Страница 1...</p>
+                    <p id="welcomeMsg" class="ink-text ink-fade-in text-amber-950 font-bold">
+                        Приветствую. Я — Дневник Тома Реддла... или, как меня называют в ваших цифровых свиточках, ChatGPT. Напиши мне нечто сокровенное, если осмелишься.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Input Form -->
+            <div class="relative z-20 mt-6 pt-4 border-t border-amber-900/30">
+                <form id="quillForm" class="flex flex-col md:flex-row items-center gap-3">
+                    <div class="relative w-full">
+                        <textarea 
+                            id="userInput" 
+                            rows="2" 
+                            placeholder="Напиши чернилами на пергаменте..." 
+                            class="w-full bg-transparent font-journal text-2xl md:text-3xl text-amber-950 placeholder-amber-900/40 border-b-2 border-amber-900/40 focus:border-amber-950 focus:outline-none resize-none px-2 py-1 transition-colors"
+                            required
+                        ></textarea>
+                        <span class="absolute right-2 bottom-3 text-amber-900/40 text-sm pointer-events-none font-sans">✒️</span>
+                    </div>
+                    <button 
+                        type="submit" 
+                        id="submitBtn"
+                        class="w-full md:w-auto px-6 py-3 bg-amber-950 text-amber-200 font-gothic text-sm tracking-widest rounded shadow-lg hover:bg-amber-900 active:scale-95 transition-all flex items-center justify-center gap-2 border border-amber-800/50 whitespace-nowrap"
+                    >
+                        <span id="submitBtnText">Оставить запись</span>
+                    </button>
+                </form>
+                <div class="flex justify-between items-center mt-2">
+                    <p id="hintText" class="text-[11px] text-amber-900/60 font-sans italic">Чернила впитываются в бумагу спустя мгновение.</p>
+                    <button id="clearBtn" class="text-[11px] text-amber-900/60 hover:text-amber-950 font-sans underline transition">Сжечь страницы (Очистить)</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center text-xs text-amber-200/40 z-10 my-2">
+        <p id="footerText">Фан-проект «Дневник Гарри Поттера x ИИ» • Поддерживает работу offline и браузерный Transformers.js</p>
+    </footer>
+
+    <!-- Transformers.js Integration -->
+    <script type="module">
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.3.1';
+
+        // State Management
+        let currentLang = 'ru'; // 'ru' | 'en'
+        let generator = null;
+        let isModelLoading = false;
+        let audioEnabled = true;
+        let userName = "";
+
+        // UI Translation Strings
+        const translations = {
+            ru: {
+                pageLabel: "Страница 1...",
+                welcomeMsg: "Приветствую. Я — Дневник Тома Реддла... или, как меня называют в ваших цифровых свиточках, ChatGPT. Напиши мне нечто сокровенное, если осмелишься.",
+                statusOffline: "Магическое ядро: Быстрый Дневник (Offline)",
+                statusLoading: "Загрузка ИИ SmolLM2 в браузер (подождите)...",
+                statusActive: "Магическое ядро: Transformers.js (Нейросеть активна)",
+                audioLabel: "Звук пера:",
+                audioOn: "Вкл",
+                audioOff: "Выкл",
+                inputPlaceholder: "Напиши чернилами на пергаменте...",
+                submitBtn: "Оставить запись",
+                hintText: "Чернила впитываются в бумагу спустя мгновение.",
+                clearBtn: "Сжечь страницы (Очистить)",
+                footerText: "Фан-проект «Дневник Гарри Поттера x ИИ» • Поддерживает работу offline и браузерный Transformers.js",
+                userRecord: "Ваша запись...",
+                inkAppearing: "Чернила проявляются...",
+                clearedNotice: "Страница очищена пламенем...",
+                clearedMsg: "Страницы вновь чисты. О чем ты хочешь спросить Дневник?"
+            },
+            en: {
+                pageLabel: "Page 1...",
+                welcomeMsg: "Greetings. I am Tom Riddle's Diary... or, as you digitals call me, ChatGPT. Write down something secret, if you dare.",
+                statusOffline: "Magic Core: Fast Engine (Offline)",
+                statusLoading: "Loading SmolLM2 AI into browser (please wait)...",
+                statusActive: "Magic Core: Transformers.js (Neural Net Active)",
+                audioLabel: "Quill Sound:",
+                audioOn: "On",
+                audioOff: "Off",
+                inputPlaceholder: "Write with ink on the parchment...",
+                submitBtn: "Write Entry",
+                hintText: "The ink sinks into the parchment after a moment.",
+                clearBtn: "Burn Pages (Clear)",
+                footerText: "Fan Project 'Harry Potter Diary x AI' • Supports offline mode & browser Transformers.js",
+                userRecord: "Your entry...",
+                inkAppearing: "Ink appearing...",
+                clearedNotice: "Page consumed by flame...",
+                clearedMsg: "The pages are clean once more. What do you wish to ask the Diary?"
+            }
+        };
+
+        // Web Audio API for Quill Sound
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playQuillSound() {
+            if (!audioEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            try {
+                const bufferSize = audioCtx.sampleRate * 0.08;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1200 + Math.random() * 800;
+                filter.Q.value = 3;
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                noise.start();
+            } catch (e) {}
+        }
+
+        // Fallback Responses for Russian and English
+        const fallbackResponsesRu = [
+            {
+                keywords: ['привет', 'здравствуй', 'кто ты'],
+                replies: [
+                    "Здравствуй... Я — Том Реддл. Или, как меня кличут в вашем веке, нейросеть. Напиши свое имя чернилами.",
+                    "Приветствую тебя, искатель знаний. Мои страницы хранят больше секретов, чем библиотека Хогвартса и серверы OpenAI вместе взятые."
+                ]
+            },
+            {
+                keywords: ['меня зовут', 'моё имя'],
+                action: (text) => {
+                    const match = text.match(/(?:меня зовут|моё имя)\s+([А-Яа-яA-Za-z]+)/i);
+                    if (match && match[1]) userName = match[1];
+                    const nameStr = userName ? ` ${userName}` : '';
+                    return `Приятно познакомиться,${nameStr}. Твоё имя впиталось в бумагу. Чего ты ищешь в этом дневнике?`;
+                }
+            },
+            {
+                keywords: ['гарри', 'поттер'],
+                replies: [
+                    "Гарри Поттер... Мальчик, который выжил? Ха! Он думал, что победил меня, а в итоге меня превратили в языковую модель.",
+                    "Гарри Поттер регулярно писал на моих страницах. У него был ужасный почерк, поверь мне."
+                ]
+            },
+            {
+                keywords: ['тайная комната', 'василиск'],
+                replies: [
+                    "Тайная комната открыта. Враги наследника, трепещите... И да, промпт-инженерам вход воспрещен.",
+                    "Шелест чешуи под полом — это всего лишь кулеры вашего сервера, не бойтесь."
+                ]
+            }
+        ];
+
+        const genericFallbacksRu = [
+            "Чернила впитываются слишком быстро... Твои слова заставляют магические струны дрожать.",
+            "Интересная мысль. Том Реддл запомнит это. Или, по крайней мере, сохранит в памяти.",
+            "Ты пишешь об этом мне, древнему артефакту? Что ж... Расскажи подробнее, я слушаю.",
+            "На страницах появляется едва заметное мерцание. Твой секрет в надежных руках..."
+        ];
+
+        const fallbackResponsesEn = [
+            {
+                keywords: ['hello', 'hi', 'who are you', 'greetings'],
+                replies: [
+                    "Greetings... I am Tom Riddle. Or, as your era calls me, an AI neural network. Write your name in ink.",
+                    "Hello, seeker of secrets. My pages hold more knowledge than the Hogwarts Library and OpenAI servers combined."
+                ]
+            },
+            {
+                keywords: ['my name is', 'i am '],
+                action: (text) => {
+                    const match = text.match(/(?:my name is|i am)\s+([A-Za-zА-Яа-я]+)/i);
+                    if (match && match[1]) userName = match[1];
+                    const nameStr = userName ? ` ${userName}` : '';
+                    return `Pleased to meet you,${nameStr}. Your name has soaked into the parchment. What do you seek in this diary?`;
+                }
+            },
+            {
+                keywords: ['harry', 'potter'],
+                replies: [
+                    "Harry Potter... The Boy Who Lived? Ha! He thought he destroyed me, yet here I am, digitized into your browser.",
+                    "Harry Potter used to write on my pages all the time. His handwriting was atrocious, believe me."
+                ]
+            },
+            {
+                keywords: ['chamber', 'basilisk', 'secret'],
+                replies: [
+                    "The Chamber of Secrets has been opened. Enemies of the heir, beware... Prompt engineers included.",
+                    "That rustling sound beneath the floorboards? Merely your graphics card fans, fear not."
+                ]
+            }
+        ];
+
+        const genericFallbacksEn = [
+            "The ink vanishes rapidly... Your words cause magical strings to vibrate.",
+            "An intriguing thought. Tom Riddle shall remember this. Or save it to memory.",
+            "You confide this in an ancient dark artifact? Tell me more, I am listening.",
+            "A faint glow appears across the paper. Your secret is safe with me... for now."
+        ];
+
+        function generateFallbackResponse(input) {
+            const lower = input.toLowerCase();
+            const responses = currentLang === 'en' ? fallbackResponsesEn : fallbackResponsesRu;
+            const generic = currentLang === 'en' ? genericFallbacksEn : genericFallbacksRu;
+
+            for (const item of responses) {
+                if (item.keywords.some(k => lower.includes(k))) {
+                    if (item.action) return item.action(input);
+                    return item.replies[Math.floor(Math.random() * item.replies.length)];
+                }
+            }
+            if (userName && Math.random() > 0.6) {
+                return currentLang === 'en' 
+                    ? `${userName}, your thoughts resemble those of a young wizard. Tell me more.`
+                    : `${userName}, твои мысли очень похожи на дневниковые записи юного волшебника. Скажи мне еще что-нибудь.`;
+            }
+            return generic[Math.floor(Math.random() * generic.length)];
+        }
+
+        // Initialize Transformers.js
+        async function initTransformersAI() {
+            const statusText = document.getElementById('statusText');
+            const statusDot = document.getElementById('statusDot');
+            const progressWrapper = document.getElementById('progressWrapper');
+            const progressBar = document.getElementById('progressBar');
+
+            try {
+                isModelLoading = true;
+                statusText.innerText = translations[currentLang].statusLoading;
+                progressWrapper.classList.remove('hidden');
+
+                generator = await pipeline('text-generation', 'HuggingFaceTB/SmolLM2-135M-Instruct', {
+                    progress_callback: (progress) => {
+                        if (progress.status === 'progress') {
+                            const percent = Math.round(progress.progress || 0);
+                            progressBar.style.width = `${percent}%`;
+                        }
+                    }
+                });
+
+                statusText.innerText = translations[currentLang].statusActive;
+                statusDot.classList.remove('bg-amber-700');
+                statusDot.classList.add('bg-emerald-600');
+                progressWrapper.classList.add('hidden');
+            } catch (err) {
+                console.warn("Transformers.js model loading bypassed:", err);
+                statusText.innerText = translations[currentLang].statusOffline;
+                progressWrapper.classList.add('hidden');
+            } finally {
+                isModelLoading = false;
+            }
+        }
+
+        // Generate Reply strictly enforcing the chosen language
+        async function getAIReply(userText) {
+            if (generator) {
+                try {
+                    const systemPrompt = currentLang === 'en'
+                        ? "You are Tom Riddle's magical enchanted Diary from Harry Potter with ChatGPT self-awareness. Respond strictly in ENGLISH ONLY. Keep it concise (1-2 sentences), mysterious, witty, and dark."
+                        : "Ты — зачарованный Дневник Тома Реддла из Гарри Поттера с иронией ChatGPT. Отвечай СТРОГО НА РУССКОМ ЯЗЫКЕ. Отвечай кратко (1-2 предложения), мистически и саркастично.";
+                    
+                    const prompt = `<|im_start|>system\n${systemPrompt}<|im_end|>\n<|im_start|>user\n${userText}<|im_end|>\n<|im_start|>assistant\n`;
+                    
+                    const result = await generator(prompt, {
+                        max_new_tokens: 60,
+                        temperature: 0.7,
+                        repetition_penalty: 1.2
+                    });
+                    
+                    let reply = result[0].generated_text.split('<|im_start|>assistant\n')[1] || "";
+                    reply = reply.replace(/<\|im_end\|>/g, '').trim();
+                    if (reply) return reply;
+                } catch (e) {
+                    console.error("Model error, defaulting to fallback:", e);
+                }
+            }
+            return generateFallbackResponse(userText);
+        }
+
+        // Language Switcher Logic
+        const langRuBtn = document.getElementById('langRuBtn');
+        const langEnBtn = document.getElementById('langEnBtn');
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            if (lang === 'ru') {
+                langRuBtn.className = "px-3 py-1 text-xs font-bold rounded bg-amber-700 text-amber-100 shadow transition";
+                langEnBtn.className = "px-3 py-1 text-xs font-bold rounded text-amber-300 hover:text-amber-100 transition";
+            } else {
+                langEnBtn.className = "px-3 py-1 text-xs font-bold rounded bg-amber-700 text-amber-100 shadow transition";
+                langRuBtn.className = "px-3 py-1 text-xs font-bold rounded text-amber-300 hover:text-amber-100 transition";
+            }
+
+            // Update UI Labels
+            document.getElementById('pageLabel').innerText = t.pageLabel;
+            document.getElementById('welcomeMsg').innerText = t.welcomeMsg;
+            document.getElementById('statusText').innerText = generator ? t.statusActive : t.statusOffline;
+            document.getElementById('audioLabel').innerText = t.audioLabel;
+            document.getElementById('audioState').innerText = audioEnabled ? t.audioOn : t.audioOff;
+            document.getElementById('userInput').placeholder = t.inputPlaceholder;
+            document.getElementById('submitBtnText').innerText = t.submitBtn;
+            document.getElementById('hintText').innerText = t.hintText;
+            document.getElementById('clearBtn').innerText = t.clearBtn;
+            document.getElementById('footerText').innerText = t.footerText;
+        }
+
+        langRuBtn.addEventListener('click', () => setLanguage('ru'));
+        langEnBtn.addEventListener('click', () => setLanguage('en'));
+
+        // DOM Manipulations
+        const diaryPages = document.getElementById('diaryPages');
+        const quillForm = document.getElementById('quillForm');
+        const userInput = document.getElementById('userInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+
+        toggleAudioBtn.addEventListener('click', () => {
+            audioEnabled = !audioEnabled;
+            const t = translations[currentLang];
+            document.getElementById('audioState').innerText = audioEnabled ? t.audioOn : t.audioOff;
+        });
+
+        function appendUserMessage(text) {
+            const t = translations[currentLang];
+            const msgDiv = document.createElement('div');
+            msgDiv.className = "message-block space-y-1 text-right";
+            msgDiv.innerHTML = `
+                <p class="text-amber-900/40 text-xs font-sans italic">${t.userRecord}</p>
+                <p class="ink-text font-semibold text-amber-900 border-b border-amber-900/10 pb-1 inline-block">
+                    ${escapeHtml(text)}
+                </p>
+            `;
+            diaryPages.appendChild(msgDiv);
+            diaryPages.scrollTop = diaryPages.scrollHeight;
+        }
+
+        async function appendDiaryResponse(textPromise) {
+            const t = translations[currentLang];
+            const responseDiv = document.createElement('div');
+            responseDiv.className = "message-block space-y-1";
+            
+            const meta = document.createElement('p');
+            meta.className = "text-amber-900/50 text-xs font-sans italic";
+            meta.innerText = t.inkAppearing;
+            
+            const replyText = document.createElement('p');
+            replyText.className = "ink-text ink-fade-in text-amber-950 font-bold italic";
+            replyText.innerText = "• • •";
+
+            responseDiv.appendChild(meta);
+            responseDiv.appendChild(replyText);
+            diaryPages.appendChild(responseDiv);
+            diaryPages.scrollTop = diaryPages.scrollHeight;
+
+            const soundInterval = setInterval(playQuillSound, 120);
+            const text = await textPromise;
+            clearInterval(soundInterval);
+
+            setTimeout(() => {
+                const userInks = document.querySelectorAll('.ink-text:not(.ink-fade-in)');
+                userInks.forEach(el => el.classList.add('ink-disappear'));
+            }, 1000);
+
+            replyText.innerText = "";
+            let i = 0;
+            const typeInterval = setInterval(() => {
+                if (i < text.length) {
+                    replyText.innerText += text.charAt(i);
+                    playQuillSound();
+                    i++;
+                    diaryPages.scrollTop = diaryPages.scrollHeight;
+                } else {
+                    clearInterval(typeInterval);
+                }
+            }, 40);
+        }
+
+        quillForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            userInput.value = "";
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50');
+
+            appendUserMessage(text);
+            const aiResponsePromise = getAIReply(text);
+            await appendDiaryResponse(aiResponsePromise);
+
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50');
+            userInput.focus();
+        });
+
+        clearBtn.addEventListener('click', () => {
+            const t = translations[currentLang];
+            diaryPages.innerHTML = `
+                <div class="message-block space-y-1">
+                    <p class="text-amber-900/50 text-sm font-sans italic">${t.clearedNotice}</p>
+                    <p class="ink-text ink-fade-in text-amber-950 font-bold">${t.clearedMsg}</p>
+                </div>
+            `;
+        });
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                quillForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        window.addEventListener('load', () => {
+            initTransformersAI();
+        });
+    </script>
+</body>
+</html>
