@@ -5,6 +5,7 @@
 <img width="515" height="640" alt="image" src="https://github.com/user-attachments/assets/d104a145-c3e0-4843-a06c-28b0d297bb62" />
 
 **DEMO:** https://github.com/AlexandriaLabs1/tom-riddle-journal/deployments/github-pages  
+**TikTok video about the project:** https://vm.tiktok.com/ZN8fuemEG/
 
 
 An interactive and atmospheric web application inspired by Tom Riddle's Diary from the *Harry Potter* universe, combined with modern AI. 🔮✨
